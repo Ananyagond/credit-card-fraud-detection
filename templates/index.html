@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Fraud Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.5s, color 0.5s;
+        }
+        .dark-mode {
+            background: #121212 !important;
+            color: #f1f1f1;
+        }
+        .container {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            width: 90%;
+            max-width: 1000px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            transition: background 0.5s, color 0.5s;
+        }
+        .dark-mode .container {
+            background: #1e1e1e;
+        }
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .dark-mode h2 {
+            color: #f1f1f1;
+        }
+        .btn-custom {
+            background: #28a745;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            width: 100%;
+        }
+        .btn-custom:hover {
+            background: #218838;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #fff;
+            background: #007bff;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <div class="container">
+        <h2>Credit Card Fraud Detection</h2>
+        <div class="row">
+            <!-- Single Transaction CSV Upload -->
+            <div class="col-md-6">
+                <div class="card p-3 mb-3">
+                    <h4 class="text-center text-primary">Single Transaction (CSV)</h4>
+                    <form action="/upload_single" method="post" enctype="multipart/form-data" class="mt-3">
+                        <input type="file" name="single_csv" class="form-control mb-3" accept=".csv" required>
+                        <button type="submit" class="btn btn-custom">Predict Single Transaction</button>
+                    </form>
+                    {% if single_result %}
+                    <div class="result alert alert-info">{{ single_result }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Batch CSV Upload -->
+            <div class="col-md-6">
+                <div class="card p-3 mb-3">
+                    <h4 class="text-center text-success">Batch Prediction (CSV)</h4>
+                    <form action="/upload_batch" method="post" enctype="multipart/form-data" class="mt-3">
+                        <input type="file" name="batch_csv" class="form-control mb-3" accept=".csv" required>
+                        <button type="submit" class="btn btn-custom">Upload & Predict Batch</button>
+                    </form>
+                    {% if batch_result %}
+                    <div class="mt-3">
+                        <h5 class="text-center">Prediction Results:</h5>
+                        {{ batch_result | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            const btn = document.querySelector(".theme-toggle");
+            if (document.body.classList.contains("dark-mode")) {
+                btn.textContent = "☀️ Light Mode";
+            } else {
+                btn.textContent = "🌙 Dark Mode";
+            }
+        }
+    </script>
+</body>
+</html>
